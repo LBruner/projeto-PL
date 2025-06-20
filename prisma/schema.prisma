@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ComercioCommodities {
+  commodity_id Int                                @id @default(autoincrement())
+  nome         String
+  variacoes    ComercioCommoditiesVariacaoPreco[]
+}
+
+model ComercioCommoditiesVariacaoPreco {
+  variacao_id  Int                 @id @default(autoincrement())
+  commodity_id Int
+  fonte        String?
+  valor        Float
+  data         DateTime
+  commodity    ComercioCommodities @relation(fields: [commodity_id], references: [commodity_id], onDelete: Cascade)
+}
+
+model Account {
+  id                 String    @id @default(cuid())
+  userId             String
+  providerType       String
+  providerId         String
+  providerAccountId  String
+  refreshToken       String?
+  accessToken        String?
+  accessTokenExpires DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  user               Usuario   @relation(fields: [userId], references: [id])
+
+  @@unique([providerId, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  expires      DateTime
+  sessionToken String   @unique
+  accessToken  String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         Usuario  @relation(fields: [userId], references: [id])
+}
+
+
+model Noticia {
+  notId                        Int                            @id @default(autoincrement())
+  titulo                       String                         @map("titulo") @db.VarChar(200)
+  subtitulo                    String                         @map("subtitulo") @db.VarChar(1000)
+  corpo                        String                         @map("corpo")
+  dataPubli                    DateTime                       @map("data_publicacao")
+  descricao                    String?                        @map("descricao") @db.VarChar(1000)
+  idCultura                    Int                            @map("id_cultura")
+  imagemLink                   String                         @map("imagem_link") @db.VarChar(300)
+  ComercioInternacionalNoticia ComercioInternacionalNoticia[]
+  cultura                      Cultura                        @relation(fields: [idCultura], references: [culturaId])
+}
+
+model Cultura {
+  culturaId  Int       @id @default(autoincrement()) @map("id_cultura")
+  nome       String    @map("nome") @db.VarChar(100)
+  descricao  String?   @map("descricao") @db.VarChar(500)
+  imagemLink String?   @map("imagem_link") @db.VarChar(300)
+  Estoque    Estoque[]
+  noticias   Noticia[]
+}
+
+model VerificationRequest {
+  id         String   @id @default(cuid())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, token])
+}
+
+model TipoPessoa {
+  id   Int    @id @default(autoincrement())
+  nome String
+}
+
+model CategoriaPessoa {
+  id        Int      @id @default(autoincrement()) @map("categ_pessoa_id")
+  codigo    Int      @map("codigo")
+  descricao String   @map("descricao") @db.VarChar(50)
+  pessoas   Pessoa[]
+}
+
+model ComercioInternacionalNoticia {
+  id            Int                   @id @map("cint_id")
+  comercioIntId Int                   @unique @map("com_int_com_int_id")
+  noticiaId     Int                   @map("not_not_id")
+  comercioInt   ComercioInternacional @relation(fields: [comercioIntId], references: [id])
+  noticia       Noticia               @relation(fields: [noticiaId], references: [notId])
+}
+
+model ComercioInternacionalProduto {
+  id            Int                   @id @map("cipi_id")
+  produtoInacId Int                   @map("prd_inac_prd_inac_id")
+  comercioIntId Int                   @map("com_int_com_int_id")
+  comercioInt   ComercioInternacional @relation(fields: [comercioIntId], references: [id])
+  produtoInac   ProdutoInac           @relation(fields: [produtoInacId], references: [id])
+
+  @@unique([comercioIntId, produtoInacId])
+}
+
+model ComercioInternacional {
+  id               Int                            @id @map("com_int_id")
+  nome             String?                        @db.VarChar(50)
+  valor            Float?
+  dataValor        DateTime?                      @map("dt_valor")
+  categoria        String?                        @db.VarChar(1)
+  descricao        String?                        @map("descrição") @db.VarChar(300)
+  noticias         ComercioInternacionalNoticia?
+  produtos         ComercioInternacionalProduto[]
+  historicoValores HistoricoValores[]
+}
+
+model Empresa {
+  id       Int       @id @default(autoincrement()) @map("empresa_id")
+  nome     String    @db.VarChar(100)
+  serial   BigInt
+  usuarios Usuario[]
+}
+
+model Endereco {
+  id          Int     @id @default(autoincrement()) @map("endereco_id")
+  logradouro  String  @db.VarChar(100)
+  numero      Int
+  bairro      String  @db.VarChar(100)
+  complemento String  @db.VarChar(100)
+  cidade      String  @db.VarChar(100)
+  estado      String? @db.VarChar(2)
+  cep         Int?
+  pais        String  @db.VarChar(100)
+  pessoaId    Int     @map("pessoa_pess_pessoa_id")
+  pessoa      Pessoa  @relation(fields: [pessoaId], references: [id])
+}
+
+model Estoque {
+  id                 Int                @id @default(autoincrement()) @map("estoque_id")
+  produto            String             @db.VarChar(50)
+  categoriaculturaId Int?
+  tipo               String             @db.VarChar(1)
+  descricao          String             @db.VarChar(2000)
+  quantidade         Float              @map("qtd")
+  preco              Float
+  unidadeMedida      String             @map("unidade_medida") @db.VarChar(25)
+  imagemLink         String?            @map("imagem_link") @db.VarChar(300)
+  ativo              Boolean            @default(true)
+  foiUtilizado       Boolean            @default(false) @map("foi_utilizado")
+  categoriaId        Cultura?           @relation(fields: [categoriaculturaId], references: [culturaId])
+  historicos         HistoricoEstoque[]
+  vendas             VendaEstoque[]
+}
+
+model FormaPagamento {
+  id     Int                   @id @map("form_pag_id")
+  codigo Int
+  tipo   String                @db.VarChar(30)
+  vendas VendaFormaPagamento[]
+}
+
+model HistoricoEstoque {
+  id         Int      @id @default(autoincrement()) @map("hist_estq_id")
+  dataAlter  DateTime @map("dt_alter")
+  horaAlter  String   @map("hora_alter") @db.VarChar(5)
+  valorAlter Float    @map("valor_alter")
+  comprador  Boolean  @default(false)
+  estoqueId  Int      @map("estoque_estoque_id")
+  vendaId    Int      @map("venda_venda_id")
+  usuarioId  String   @map("usuario_usuario_id")
+  estoque    Estoque  @relation(fields: [estoqueId], references: [id])
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  venda      Venda    @relation(fields: [vendaId], references: [id])
+}
+
+model HistoricoValores {
+  id            Int                   @id @map("hist_valores_id")
+  valor         Float
+  dataValorHist DateTime              @map("dt_valor_hist")
+  comercioIntId Int                   @map("com_int_com_int_id")
+  comercioInt   ComercioInternacional @relation(fields: [comercioIntId], references: [id])
+}
+
+model Imagem {
+  id     Int    @id @map("imagem_id")
+  imagem String @db.VarChar(200)
+}
+
+model Mensagem {
+  id        Int    @id @map("mensagem_id")
+  descricao String @db.VarChar(100)
+}
+
+model Moeda {
+  sigla          String @id @map("sigla") @db.VarChar(10)
+  nome           String @map("nome") @db.VarChar(40)
+  codigoBandeira String @map("codigo_bandeira") @db.VarChar(40)
+}
+
+model Pessoa {
+  id             Int             @id @default(autoincrement()) @map("pess_pessoa_id")
+  email          String          @map("pess_email") @db.VarChar(50)
+  imagemLink     String?         @map("imagem_link") @db.VarChar(300)
+  categoriaId    Int             @map("categ_pess_categ_pessoa_id")
+  enderecos      Endereco[]
+  categoria      CategoriaPessoa @relation(fields: [categoriaId], references: [id])
+  pessoaFisica   PessoaFisica?
+  pessoaJuridica PessoaJuridica?
+  telefones      Telefone[]
+  vendas         VendaPessoa[]
+}
+
+model PessoaFisica {
+  id             Int      @id @default(autoincrement()) @map("pess_pessoa_id")
+  nome           String   @map("pepf_nome") @db.VarChar(100)
+  cpf            BigInt   @map("pepf_cpf")
+  dataNascimento DateTime @map("pepf_dt_nascimento")
+  rg             BigInt?  @map("pepf_rg")
+  pessoa         Pessoa   @relation(fields: [id], references: [id])
+}
+
+model PessoaJuridica {
+  id                Int     @id @default(autoincrement()) @map("pess_pessoa_id")
+  razaoSocial       String  @map("psjr_razao_social") @db.VarChar(100)
+  cnpj              BigInt  @map("psjr_cnpj")
+  inscricaoEstadual BigInt  @map("psjr_insc_esta")
+  nomeFantasia      String? @map("psjr_nome_fant") @db.VarChar(100)
+  pessoa            Pessoa  @relation(fields: [id], references: [id])
+}
+
+model ProdutoInac {
+  id              Int                            @id @map("prd_inac_id")
+  pais            String                         @db.VarChar(30)
+  peso            Float
+  valor           Float
+  totalExpValPais Float?                         @map("total_exp_val_pais")
+  comerciosInt    ComercioInternacionalProduto[]
+}
+
+model Telefone {
+  id       Int    @id @default(autoincrement()) @map("telefone_id")
+  tipo     String @db.VarChar(30)
+  numero   String @db.VarChar(30)
+  pessoaId Int    @map("pessoa_pess_pessoa_id")
+  pessoa   Pessoa @relation(fields: [pessoaId], references: [id])
+}
+
+model Usuario {
+  id           String             @id @default(cuid())
+  nome         String             @db.VarChar(100)
+  cpf          String             @db.VarChar(14)
+  senha        String             @db.VarChar(14)
+  admin        Boolean            @default(false)
+  alterarSenha Boolean            @default(false)
+  imagemLink   String?            @map("imagem_link") @db.VarChar(300)
+  inativado    Boolean            @default(false)
+  email        String?            @db.VarChar(300)
+  esp1         String?            @db.VarChar(20)
+  esp2         String?            @db.VarChar(20)
+  empresaId    Int                @map("empresa_empresa_id")
+  Account      Account[]
+  historicos   HistoricoEstoque[]
+  Session      Session[]
+  empresa      Empresa            @relation(fields: [empresaId], references: [id])
+}
+
+model Venda {
+  id              Int                   @id @default(autoincrement()) @map("venda_id")
+  dataVenda       DateTime              @map("dt_venda")
+  valorVenda      Float                 @map("valor_venda")
+  quantidadeVenda Float                 @map("qtd_venda")
+  desconto        Float?
+  historicos      HistoricoEstoque[]
+  estoques        VendaEstoque[]
+  formasPagamento VendaFormaPagamento[]
+  pessoas         VendaPessoa[]
+}
+
+model VendaEstoque {
+  id        Int     @id @default(autoincrement()) @map("vest_id")
+  precoProp Float   @map("prc_prop")
+  estoqueId Int     @map("estoque_estoque_id")
+  vendaId   Int     @map("venda_venda_id")
+  estoque   Estoque @relation(fields: [estoqueId], references: [id])
+  venda     Venda   @relation(fields: [vendaId], references: [id])
+
+  @@unique([vendaId, estoqueId])
+}
+
+model VendaFormaPagamento {
+  id               Int            @id @default(autoincrement()) @map("vfpag_id")
+  vendaId          Int            @map("venda_venda_id")
+  formaPagamentoId Int            @map("forma_pagamento_form_pag_id")
+  formaPagamento   FormaPagamento @relation(fields: [formaPagamentoId], references: [id])
+  venda            Venda          @relation(fields: [vendaId], references: [id])
+
+  @@unique([formaPagamentoId, vendaId])
+}
+
+model VendaPessoa {
+  id         Int    @id @default(autoincrement()) @map("vpes_id")
+  vendaId    Int    @map("venda_venda_id")
+  pessoaId   Int    @map("pessoa_pess_pessoa_id")
+  tipoPessoa String @map("tipo_pessoa") @db.VarChar(15)
+  pessoa     Pessoa @relation(fields: [pessoaId], references: [id])
+  venda      Venda  @relation(fields: [vendaId], references: [id])
+
+  @@unique([vendaId, pessoaId])
+}

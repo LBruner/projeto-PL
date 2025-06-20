@@ -1,29 +1,8 @@
-import type {NextApiRequest, NextApiResponse} from 'next';
 import solver from 'javascript-lp-solver';
+import {SimplexInput, SimplexOutput} from "@/models/simplex-model";
 
-type SimplexInput = {
-    lucro: number[];
-    maoDeObra: number[];
-    material: number[];
-    limiteMaoDeObra: number;
-    limiteMaterial: number;
-};
-
-type SimplexOutput = {
-    modeloA?: number;
-    modeloB?: number;
-    modeloC?: number;
-    result?: number;
-    feasible?: boolean;
-};
-
-export async function POST(req: Request,
-                          res: NextApiResponse<SimplexOutput | { error: string }>
+export async function POST(req: Request
 ) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({error: 'Método não permitido'});
-    }
-
     const data = await req.json();
     const {
         lucro,
@@ -61,14 +40,54 @@ export async function POST(req: Request,
 
     try {
         const result = solver.Solve(model) as SimplexOutput;
+        const maoDeObraUsada =
+            (result.modeloA ?? 0) * maoDeObra[0] +
+            (result.modeloB ?? 0) * maoDeObra[1] +
+            (result.modeloC ?? 0) * maoDeObra[2];
 
-        return new Response(JSON.stringify({result}), {
+        const materialUsado =
+            (result.modeloA ?? 0) * material[0] +
+            (result.modeloB ?? 0) * material[1] +
+            (result.modeloC ?? 0) * material[2];
+
+        let folgaMaoDeObra = limiteMaoDeObra - maoDeObraUsada;
+        let folgaMaterial = limiteMaterial - materialUsado;
+
+        if (folgaMaoDeObra < 0) {
+            folgaMaoDeObra = 0;
+        }
+        if (folgaMaterial < 0) {
+            folgaMaterial = 0;
+        }
+
+        result.modeloA = (typeof result.modeloA === 'number') ? Math.floor(result.modeloA) : 0;
+        result.modeloB = (typeof result.modeloB === 'number') ? Math.floor(result.modeloB) : 0;
+        result.modeloC = (typeof result.modeloC === 'number') ? Math.floor(result.modeloC) : 0;
+
+        const resultados = {
+            resultado: result.result,
+            modeloA: result.modeloA,
+            modeloB: result.modeloB,
+            modeloC: result.modeloC,
+            maoDeObra,
+            folgaMaterial,
+            folgaMaoDeObra
+        }
+        console.log(resultados);
+
+        return new Response(JSON.stringify(resultados), {
             headers: {
                 "Content-Type": "application/json",
             },
         });
     } catch (error) {
-        res.status(500).json({error: 'Erro ao resolver o problema.'});
+        console.log(error)
+        return new Response(JSON.stringify({error: 'Erro ao calcular'}), {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            status: 500,
+        });
     }
 }
 
