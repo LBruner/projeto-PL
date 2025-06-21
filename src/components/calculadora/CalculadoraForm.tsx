@@ -1,8 +1,8 @@
 import React, {ChangeEvent} from "react";
-import {Calculator, Clock, Package, Settings, Zap} from "lucide-react";
+import {Calculator, Clock, DollarSign, Package, PersonStanding, Settings, Zap} from "lucide-react";
 import SimplexInput from "@/components/UI/SimplexInput";
 import {SimplexFormData} from "@/models/simplex-form-data";
-import {calculadoraCategories, calculadoraModels} from "@/helpers/calculadoraForm";
+import {calculadoraModels} from "@/helpers/calculadoraForm";
 import CustomButton from "@/components/UI/CustomButton";
 
 interface CalculadoraFormProps {
@@ -10,6 +10,33 @@ interface CalculadoraFormProps {
     handleChange: (e: ChangeEvent<HTMLInputElement>, categoria: keyof SimplexFormData, index?: number) => void;
     calcularResultados: () => Promise<void>;
 }
+
+export const calculadoraCategories = [
+    {
+        key: 'lucro',
+        label: 'Lucro',
+        icon: DollarSign,
+        unit: '$',
+        color: 'from-green-500 to-emerald-600',
+        bgColor: 'bg-green-50'
+    },
+    {
+        key: 'maoDeObra',
+        label: 'Mão-de-obra',
+        icon: PersonStanding,
+        unit: 'h',
+        color: 'from-blue-500 to-indigo-600',
+        bgColor: 'bg-blue-50'
+    },
+    {
+        key: 'material',
+        label: 'Material',
+        icon: Package,
+        unit: 'kg',
+        color: 'from-purple-500 to-violet-600',
+        bgColor: 'bg-purple-50'
+    }
+];
 
 
 const CalculadoraForm: React.FC<CalculadoraFormProps> = ({formData,handleChange, calcularResultados}) => {

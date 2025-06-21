@@ -22,9 +22,10 @@ const AbasSimplex: React.FC = () => {
     }]);
 
     const [abaAtivaId, setAbaAtivaId] = useState(1);
-    const abaAtiva = abas.find((a) => a.id === abaAtivaId)!;
     const [isLoading, setIsLoading] = useState(false);
     const [isCalculatorVisible, setIsCalculatorVisible] = useState(true);
+
+    const abaAtiva = abas.find((a) => a.id === abaAtivaId)!;
 
     useEffect(() => {
         const abaAtual = abas.find((a) => a.id === abaAtivaId);
@@ -112,7 +113,7 @@ const AbasSimplex: React.FC = () => {
 
     return (
         <div
-            className={'bg-gradient-to-br dark:border-none dark:from-gray-600 dark:via-gray-900 dark:to-slate-900 from-slate-50 via-blue-50 to-indigo-100 border rounded-lg shadow pb-12 mb-2'}>
+            className={'w-full bg-gradient-to-br dark:border-none dark:from-gray-600 dark:via-gray-900 dark:to-slate-900 from-slate-50 via-blue-50 to-indigo-100 border rounded-lg shadow pb-12 mb-2'}>
             <AbaSimplex
                 abas={abas}
                 abaAtivaId={abaAtiva.id}
@@ -121,18 +122,7 @@ const AbasSimplex: React.FC = () => {
                 deletarAba={deletarAba}
             />
             <div className="h-full w-full">
-                {isLoading && (
-                    <div
-                        className="absolute h-full inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 dark:bg-opacity-50 z-50">
-                        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-                            <div className="flex items-center justify-center gap-4">
-                                <div
-                                    className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                                <span className="text-gray-800 dark:text-gray-100">Calculando...</span>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                {isLoading && loadingDiv}
                 <div className="flex h-full w-full items-center justify-center gap-8">
                     {isCalculatorVisible && <CalculadoraForm
                         formData={abaAtiva.form}
@@ -150,5 +140,16 @@ const AbasSimplex: React.FC = () => {
         </div>
     );
 };
+
+const loadingDiv = <div
+    className="absolute h-full inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 dark:bg-opacity-50 z-50">
+    <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+        <div className="flex items-center justify-center gap-4">
+            <div
+                className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+            <span className="text-gray-800 dark:text-gray-100">Calculando...</span>
+        </div>
+    </div>
+</div>
 
 export default AbasSimplex;
