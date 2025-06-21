@@ -1,8 +1,8 @@
 import React, {ChangeEvent} from "react";
-import {Calculator, Clock, DollarSign, Package, Settings, Zap} from "lucide-react";
+import {Calculator, Clock, Package, Settings, Zap} from "lucide-react";
 import SimplexInput from "@/components/UI/SimplexInput";
 import {SimplexFormData} from "@/models/simplex-form-data";
-import {categories, models} from "@/helpers/calculadoraForm";
+import {calculadoraCategories, calculadoraModels} from "@/helpers/calculadoraForm";
 import CustomButton from "@/components/UI/CustomButton";
 
 interface CalculadoraFormProps {
@@ -14,8 +14,8 @@ interface CalculadoraFormProps {
 
 const CalculadoraForm: React.FC<CalculadoraFormProps> = ({formData,handleChange, calcularResultados}) => {
     return (
-        <div className="h-auto w-full px-6">
-            <div className="max-w-5xl mx-auto">
+        <div className="w-11/12 px-6">
+            <div className="mx-auto">
                 <div
                     className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/30 overflow-hidden">
                     <div className="bg-gradient-to-r from-gray-50 to-slate-100 dark:from-gray-700 dark:to-gray-800 px-8 py-4 border-b border-gray-200 dark:border-gray-600">
@@ -24,7 +24,7 @@ const CalculadoraForm: React.FC<CalculadoraFormProps> = ({formData,handleChange,
                                 <Settings className="w-5 h-5 text-blue-600 dark:text-blue-400"/>
                                 Parâmetros
                             </h3>
-                            {models.map((model, index) => (
+                            {calculadoraModels.map((model, index) => (
                                 <div key={model} className="text-center">
                                     <div
                                         className={`inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r ${
@@ -41,7 +41,7 @@ const CalculadoraForm: React.FC<CalculadoraFormProps> = ({formData,handleChange,
                     </div>
 
                     <div className="px-8 py-4 space-y-4">
-                        {categories.map(({key, label, icon: Icon, unit, color, bgColor}) => (
+                        {calculadoraCategories.map(({key, label, icon: Icon, unit, color, bgColor}) => (
                             <div key={key} className={`${bgColor} dark:bg-gray-700/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-600`}>
                                 <div className="grid grid-cols-4 gap-6 items-center">
                                     <div className="flex items-center gap-3">

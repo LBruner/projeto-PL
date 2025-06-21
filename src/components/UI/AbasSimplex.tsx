@@ -1,10 +1,11 @@
 'use client';
 
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useState, useEffect} from "react";
 import {Resultado, SimplexFormData} from "@/models/simplex-form-data";
-import CalculadoraForm from "@/components/calculadora/calculadora-form";
-import CalculadoraResultados from "@/components/calculadora/calculadora-resultados";
+import CalculadoraForm from "@/components/calculadora/CalculadoraForm";
+import CalculadoraResultados from "@/components/calculadora/CalculadoraResultados";
 import AbaSimplex from "@/components/UI/AbaSimplex";
+import {formDefaultData} from "@/helpers/calculadoraForm";
 
 type AbasSimplex = {
     id: number;
@@ -17,18 +18,20 @@ const AbasSimplex: React.FC = () => {
     const [abas, setAbas] = useState<AbasSimplex[]>([{
         id: 1,
         nome: 'Cenário: 1',
-        form: {
-            lucro: [4, 2, 3],
-            maoDeObra: [7, 3, 6],
-            material: [4, 4, 5],
-            limiteMaoDeObra: 150,
-            limiteMaterial: 200,
-        },
+        form: formDefaultData,
     }]);
 
     const [abaAtivaId, setAbaAtivaId] = useState(1);
     const abaAtiva = abas.find((a) => a.id === abaAtivaId)!;
     const [isLoading, setIsLoading] = useState(false);
+    const [isCalculatorVisible, setIsCalculatorVisible] = useState(true);
+
+    useEffect(() => {
+        const abaAtual = abas.find((a) => a.id === abaAtivaId);
+        if (abaAtual) {
+            setIsCalculatorVisible(!abaAtual.resultado);
+        }
+    }, [abaAtivaId]);
 
     const handleChange = (
         e: ChangeEvent<HTMLInputElement>,
@@ -51,9 +54,10 @@ const AbasSimplex: React.FC = () => {
                     novoForm[categoria] = value as any;
                 }
 
-                return {...aba, form: novoForm};
+                return { ...aba, form: novoForm, resultado: undefined };
             })
         );
+        setIsCalculatorVisible(true);
     };
 
     const calcularResultados = async () => {
@@ -72,6 +76,9 @@ const AbasSimplex: React.FC = () => {
             )
         );
 
+        console.log(abas);
+        setIsCalculatorVisible(false);
+
         setTimeout(() => setIsLoading(false), 500);
     };
 
@@ -82,14 +89,8 @@ const AbasSimplex: React.FC = () => {
             {
                 id: novaId,
                 nome: `Cenário: ${novaId}`,
-                form: {
-                    lucro: [0, 0, 0],
-                    maoDeObra: [0, 0, 0],
-                    material: [0, 0, 0],
-                    limiteMaoDeObra: 0,
-                    limiteMaterial: 0,
-                },
-            },
+                form: formDefaultData
+            }
         ]);
         setAbaAtivaId(novaId);
     };
@@ -105,23 +106,47 @@ const AbasSimplex: React.FC = () => {
         }
     };
 
+    const handleTabChange = (novaAbaId: number) => {
+        setAbaAtivaId(novaAbaId);
+    };
+
     return (
         <div
             className={'bg-gradient-to-br dark:border-none dark:from-gray-600 dark:via-gray-900 dark:to-slate-900 from-slate-50 via-blue-50 to-indigo-100 border rounded-lg shadow pb-12 mb-2'}>
-            <AbaSimplex abas={abas} abaAtivaId={abaAtiva.id} setAbaAtivaId={setAbaAtivaId} adicionarAba={adicionarAba}
-                        deletarAba={deletarAba}/>
-                <div className="h-full w-full">
-                    <div className="flex w-full items-center justify-center gap-8">
-                        <CalculadoraForm
-                            formData={abaAtiva.form}
-                            handleChange={handleChange}
-                            calcularResultados={calcularResultados}
-                        />
-                        {abaAtiva.resultado && (
-                            <CalculadoraResultados resultado={abaAtiva.resultado}/>
-                        )}
+            <AbaSimplex
+                abas={abas}
+                abaAtivaId={abaAtiva.id}
+                setAbaAtivaId={handleTabChange}
+                adicionarAba={adicionarAba}
+                deletarAba={deletarAba}
+            />
+            <div className="h-full w-full">
+                {isLoading && (
+                    <div
+                        className="absolute h-full inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 dark:bg-opacity-50 z-50">
+                        <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+                            <div className="flex items-center justify-center gap-4">
+                                <div
+                                    className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                                <span className="text-gray-800 dark:text-gray-100">Calculando...</span>
+                            </div>
+                        </div>
                     </div>
+                )}
+                <div className="flex h-full w-full items-center justify-center gap-8">
+                    {isCalculatorVisible && <CalculadoraForm
+                        formData={abaAtiva.form}
+                        handleChange={handleChange}
+                        calcularResultados={calcularResultados}
+                    />}
+                    {!isCalculatorVisible && abaAtiva.resultado && (
+                        <CalculadoraResultados
+                            resultado={abaAtiva.resultado}
+                            setIsCalculatorVisible={setIsCalculatorVisible}
+                        />
+                    )}
                 </div>
+            </div>
         </div>
     );
 };

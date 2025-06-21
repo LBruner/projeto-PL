@@ -36,6 +36,11 @@ export async function POST(req: Request
                 material: material[2],
             },
         },
+        ints: {
+            modeloA: 1,
+            modeloB: 1,
+            modeloC: 1
+        }
     };
 
     try {
@@ -52,6 +57,10 @@ export async function POST(req: Request
 
         let folgaMaoDeObra = limiteMaoDeObra - maoDeObraUsada;
         let folgaMaterial = limiteMaterial - materialUsado;
+
+        const arredondar = (valor: number) => Math.abs(valor) < 1e-6 ? 0 : valor;
+        folgaMaoDeObra = arredondar(folgaMaoDeObra);
+        folgaMaterial = arredondar(folgaMaterial);
 
         if (folgaMaoDeObra < 0) {
             folgaMaoDeObra = 0;
@@ -70,7 +79,7 @@ export async function POST(req: Request
             modeloB: result.modeloB,
             modeloC: result.modeloC,
             maoDeObra,
-            folgaMaterial,
+            folgaMaterial: folgaMaterial,
             folgaMaoDeObra
         }
         console.log(resultados);

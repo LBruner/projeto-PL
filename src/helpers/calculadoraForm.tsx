@@ -1,4 +1,4 @@
-import {Clock, DollarSign, Package} from "lucide-react";
+import {DollarSign, Package, PersonStanding} from "lucide-react";
 
 export const formDefaultData = {
     lucro: [4, 2, 3],
@@ -8,9 +8,9 @@ export const formDefaultData = {
     limiteMaterial: 200,
 }
 
-export const models = ['Modelo A', 'Modelo B', 'Modelo C'];
+export const calculadoraModels = ['Modelo A', 'Modelo B', 'Modelo C'];
 
-export const categories = [
+export const calculadoraCategories = [
     {
         key: 'lucro',
         label: 'Lucro',
@@ -22,7 +22,7 @@ export const categories = [
     {
         key: 'maoDeObra',
         label: 'Mão-de-obra',
-        icon: Clock,
+        icon: PersonStanding,
         unit: 'h',
         color: 'from-blue-500 to-indigo-600',
         bgColor: 'bg-blue-50'

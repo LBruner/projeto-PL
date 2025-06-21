@@ -10,7 +10,7 @@ export type Resultado = {
     modeloA?: number;
     modeloB?: number;
     modeloC?: number;
-    result?: number;
+    resultado?: number;
     folgaMaterial?: number;
     folgaMaoDeObra?: number;
 };
