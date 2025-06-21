@@ -1,9 +1,10 @@
 import React from "react";
 import {Activity, ArrowLeft, Clock, DollarSign, Package} from "lucide-react";
 import {Resultado} from "@/models/simplex-form-data";
-import {Modelo} from "@/helpers/calculadoraForm";
+import {Modelo} from "@/helpers/formDefaults";
 import ModeloResultado from "@/components/UI/ModeloResultado";
 import ResultadosResumoItem from "@/components/UI/ResultadosResumo";
+import {formatCurrency, formatNumber} from "@/helpers/numberFormat";
 
 interface CalculadoraResultadosProps {
     resultado: Resultado;
@@ -85,7 +86,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <ResultadosResumoItem
                                         title="Mão-de-obra"
                                         subtitle="Recurso disponível"
-                                        value={typeof resultado.folgaMaoDeObra === 'number' ? resultado.folgaMaoDeObra.toFixed(2) : resultado.folgaMaoDeObra || '-'}
+                                        value={typeof resultado.folgaMaoDeObra === 'number' ? formatNumber(resultado.folgaMaoDeObra)  : resultado.folgaMaoDeObra || '-'}
                                         unit="horas de folga"
                                         icon={Clock}
                                         colorScheme="blue"
@@ -93,7 +94,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <ResultadosResumoItem
                                         title="Material"
                                         subtitle="Recurso disponível"
-                                        value={typeof resultado.folgaMaterial === 'number' ? resultado.folgaMaterial.toFixed(2) : resultado.folgaMaterial || '-'}
+                                        value={typeof resultado.folgaMaterial === 'number' ? formatNumber(resultado.folgaMaterial)  : resultado.folgaMaterial || '-'}
                                         unit="kg de folga"
                                         icon={Package}
                                         colorScheme="purple"
@@ -101,7 +102,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <ResultadosResumoItem
                                         title="Lucros"
                                         subtitle="Valor final"
-                                        value={`R$${typeof resultado.resultado === 'number' ? resultado.resultado.toFixed(2) : resultado.folgaMaterial || '-'}`}
+                                        value={`${typeof resultado.resultado === 'number' ? formatCurrency(resultado.resultado)  : resultado.folgaMaterial || '-'}`}
                                         unit="lucros"
                                         icon={DollarSign}
                                         colorScheme="yellow"

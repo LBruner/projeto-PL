@@ -5,7 +5,7 @@ import {Resultado, SimplexFormData} from "@/models/simplex-form-data";
 import CalculadoraForm from "@/components/calculadora/CalculadoraForm";
 import CalculadoraResultados from "@/components/calculadora/CalculadoraResultados";
 import AbaSimplex from "@/components/UI/AbaSimplex";
-import {formDefaultData} from "@/helpers/calculadoraForm";
+import {formDefaultData} from "@/helpers/formDefaults";
 
 type AbasSimplex = {
     id: number;
@@ -39,7 +39,13 @@ const AbasSimplex: React.FC = () => {
         categoria: keyof SimplexFormData,
         index?: number
     ) => {
-        const value = parseFloat(e.target.value);
+        const inputValue = e.target.value;
+
+        const value = inputValue === '' || inputValue === null || inputValue === undefined
+            ? 0
+            : parseFloat(inputValue);
+
+        const finalValue = isNaN(value) ? 0 : value;
 
         setAbas((prev) =>
             prev.map((aba) => {
@@ -49,10 +55,10 @@ const AbasSimplex: React.FC = () => {
 
                 if (index !== undefined && Array.isArray(novoForm[categoria])) {
                     const arr = [...(novoForm[categoria] as number[])];
-                    arr[index] = value;
+                    arr[index] = finalValue;
                     novoForm[categoria] = arr as any;
                 } else {
-                    novoForm[categoria] = value as any;
+                    novoForm[categoria] = finalValue as any;
                 }
 
                 return { ...aba, form: novoForm, resultado: undefined };

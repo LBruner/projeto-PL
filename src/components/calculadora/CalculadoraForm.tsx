@@ -2,7 +2,7 @@ import React, {ChangeEvent} from "react";
 import {Calculator, Clock, DollarSign, Package, PersonStanding, Settings, Zap} from "lucide-react";
 import SimplexInput from "@/components/UI/SimplexInput";
 import {SimplexFormData} from "@/models/simplex-form-data";
-import {calculadoraModels} from "@/helpers/calculadoraForm";
+import {calculadoraModels} from "@/helpers/formDefaults";
 import CustomButton from "@/components/UI/CustomButton";
 
 interface CalculadoraFormProps {
