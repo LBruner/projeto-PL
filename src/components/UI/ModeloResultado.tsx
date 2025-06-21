@@ -1,9 +1,9 @@
 import React from "react";
-import {Modelo} from "@/helpers/calculadoraForm";
+import {Modelo} from "@/helpers/formDefaults";
 
 interface ModeloResultadoProps {
     modelo: Modelo
-};
+}
 
 const ModeloResultado: React.FC<ModeloResultadoProps> = ({modelo}) => {
     return (
