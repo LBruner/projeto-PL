@@ -123,6 +123,12 @@ const AbasSimplexList: React.FC = () => {
         dadosSalvos[nome] = {...abaAtiva.form, date: new Date()};
         localStorage.setItem('formulariosSimplex', JSON.stringify(dadosSalvos,));
 
+        setAbas((prev) =>
+            prev.map((aba) =>
+                aba.id === abaAtivaId ? {...aba, nome} : aba
+            )
+        );
+
         addToast({
             title: `Sucesso`,
             description: `Cenário salvo com sucesso!`,
