@@ -1,11 +1,12 @@
 'use client';
 
-import React, {ChangeEvent, useState, useEffect} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Resultado, SimplexFormData} from "@/models/simplex-form-data";
 import CalculadoraForm from "@/components/calculadora/CalculadoraForm";
 import CalculadoraResultados from "@/components/calculadora/CalculadoraResultados";
-import AbaSimplex from "@/components/UI/AbaSimplex";
+import AbasWrapper from "@/components/UI/AbasWrapper";
 import {formDefaultData} from "@/helpers/formDefaults";
+import {addToast} from "@heroui/react";
 
 type AbasSimplex = {
     id: number;
@@ -14,7 +15,7 @@ type AbasSimplex = {
     resultado?: Resultado;
 };
 
-const AbasSimplex: React.FC = () => {
+const AbasSimplexList: React.FC = () => {
     const [abas, setAbas] = useState<AbasSimplex[]>([{
         id: 1,
         nome: 'Cenário: 1',
@@ -61,7 +62,7 @@ const AbasSimplex: React.FC = () => {
                     novoForm[categoria] = finalValue as any;
                 }
 
-                return { ...aba, form: novoForm, resultado: undefined };
+                return {...aba, form: novoForm, resultado: undefined};
             })
         );
         setIsCalculatorVisible(true);
@@ -117,15 +118,57 @@ const AbasSimplex: React.FC = () => {
         setAbaAtivaId(novaAbaId);
     };
 
+    const salvarFormulario = (nome: string) => {
+        const dadosSalvos = JSON.parse(localStorage.getItem('formulariosSimplex') || '{}');
+        dadosSalvos[nome] = {...abaAtiva.form, date: new Date()};
+        localStorage.setItem('formulariosSimplex', JSON.stringify(dadosSalvos,));
+
+        addToast({
+            title: `Sucesso`,
+            description: `Cenário salvo com sucesso!`,
+            color: 'success',
+            classNames: {
+                base: 'z-[9999]'
+            }
+        })
+    };
+
+    const carregarFormulariosSalvos = (): Record<string, SimplexFormData> => {
+        if (typeof window !== 'undefined') {
+            return JSON.parse(localStorage.getItem('formulariosSimplex') || '{}');
+        }
+        return {};
+    };
+
+    const carregarFormularioComoNovaAba = (nome: string) => {
+        const formularios = carregarFormulariosSalvos();
+        const form = formularios[nome];
+
+        if (!form) return alert("Formulário não encontrado.");
+
+        const novaId = abas[abas.length - 1].id + 1;
+        setAbas([
+            ...abas,
+            {
+                id: novaId,
+                nome: `${nome}`,
+                form
+            }
+        ]);
+        setAbaAtivaId(novaId);
+    };
+
+
     return (
         <div
             className={'w-full bg-gradient-to-br dark:border-none dark:from-gray-600 dark:via-gray-900 dark:to-slate-900 from-slate-50 via-blue-50 to-indigo-100 border rounded-lg shadow pb-12 mb-2'}>
-            <AbaSimplex
+            <AbasWrapper
                 abas={abas}
                 abaAtivaId={abaAtiva.id}
                 setAbaAtivaId={handleTabChange}
                 adicionarAba={adicionarAba}
                 deletarAba={deletarAba}
+                onLoadScenario={carregarFormularioComoNovaAba}
             />
             <div className="h-full w-full">
                 {isLoading && loadingDiv}
@@ -139,6 +182,7 @@ const AbasSimplex: React.FC = () => {
                         <CalculadoraResultados
                             resultado={abaAtiva.resultado}
                             setIsCalculatorVisible={setIsCalculatorVisible}
+                            salvarFormulario={salvarFormulario}
                         />
                     )}
                 </div>
@@ -158,4 +202,4 @@ const loadingDiv = <div
     </div>
 </div>
 
-export default AbasSimplex;
+export default AbasSimplexList;

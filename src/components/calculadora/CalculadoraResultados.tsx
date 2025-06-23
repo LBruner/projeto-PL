@@ -1,20 +1,23 @@
-import React from "react";
-import {Activity, ArrowLeft, Clock, DollarSign, Package} from "lucide-react";
+import React, {useState} from "react";
+import {Activity, ArrowLeft, Clock, DollarSign, Package, Save} from "lucide-react";
 import {Resultado} from "@/models/simplex-form-data";
 import {Modelo} from "@/helpers/formDefaults";
 import ModeloResultado from "@/components/UI/ModeloResultado";
 import ResultadosResumoItem from "@/components/UI/ResultadosResumo";
 import {formatCurrency, formatNumber} from "@/helpers/numberFormat";
+import {Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@heroui/react";
 
 interface CalculadoraResultadosProps {
     resultado: Resultado;
     setIsCalculatorVisible: React.Dispatch<React.SetStateAction<boolean>>
+    salvarFormulario: (nome: string) => void
 }
 
 const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
     {
         resultado,
-        setIsCalculatorVisible
+        setIsCalculatorVisible,
+        salvarFormulario
     }) => {
     const models: Modelo[] = [
         {
@@ -43,8 +46,74 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
         }
     ];
 
+    const {isOpen, onOpen, onClose} = useDisclosure();
+    const [scenarioName, setScenarioName] = useState("");
+    const [error, setError] = useState("");
+
+    const validateScenarioName = (name: string): string => {
+        if (!name.trim()) {
+            return "Nome do cenário é obrigatório";
+        }
+
+        if (name.trim().length < 2) {
+            return "Nome deve ter pelo menos 2 caracteres";
+        }
+
+        if (name.trim().length > 50) {
+            return "Nome deve ter no máximo 50 caracteres";
+        }
+
+        return "";
+    };
+
+    const handleSave = async () => {
+        const trimmedName = scenarioName.trim();
+        const validationError = validateScenarioName(trimmedName);
+
+        console.log(validationError)
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 300));
+            salvarFormulario(trimmedName);
+            setError('');
+            onClose();
+        } catch (error) {
+            setError("Erro ao salvar o cenário");
+        }
+    };
+
     return (
         <div className="w-11/12 p-6">
+            <Modal classNames={{backdrop: 'z-10'}} backdrop={'blur'} isOpen={isOpen} onClose={onClose} size="2xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <h2 className="text-xl font-semibold">Salvar Cenário</h2>
+                                <p className="text-sm text-gray-500 font-normal">
+                                    Escolha um nome para o cenário e clique em salvar.
+                                </p>
+                                <Input isRequired={true} onValueChange={(e) => setScenarioName(e)} errorMessage={error} isInvalid={error.length != 0} label={'Cenário'}/>
+                            </ModalHeader>
+                            <ModalBody className="py-4">
+
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color="danger" variant="light" onPress={onClose}>
+                                    Fechar
+                                </Button>
+                                <Button color="primary" variant="shadow" onPress={handleSave}>
+                                    Salvar
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
             <div className={'absolute z-40'}>
                 <button
                     onClick={() => setIsCalculatorVisible(true)}
@@ -59,10 +128,18 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                         className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
                         <div
                             className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 px-8 py-6 border-b border-gray-200 dark:border-gray-700">
-                            <div className="flex items-center gap-3">
-                                <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400"/>
-                                <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Produção por
-                                    Modelo</h3>
+                            <div className="flex justify-between items-center gap-3">
+                                <div className={'flex gap-4'}>
+                                    <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400"/>
+                                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Produção por
+                                        Modelo</h3>
+                                </div>
+                                <div className={'flex gap-4'}>
+                                    <Button onPress={onOpen} color={'primary'} variant={'ghost'}>
+                                        <Save/>
+                                        <p className={'font-semibold'}>Salvar cenário</p>
+                                    </Button>
+                                </div>
                             </div>
                         </div>
 
@@ -86,7 +163,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <ResultadosResumoItem
                                         title="Mão-de-obra"
                                         subtitle="Recurso disponível"
-                                        value={typeof resultado.folgaMaoDeObra === 'number' ? formatNumber(resultado.folgaMaoDeObra)  : resultado.folgaMaoDeObra || '-'}
+                                        value={typeof resultado.folgaMaoDeObra === 'number' ? formatNumber(resultado.folgaMaoDeObra) : resultado.folgaMaoDeObra || '-'}
                                         unit="horas de folga"
                                         icon={Clock}
                                         colorScheme="blue"
@@ -94,7 +171,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <ResultadosResumoItem
                                         title="Material"
                                         subtitle="Recurso disponível"
-                                        value={typeof resultado.folgaMaterial === 'number' ? formatNumber(resultado.folgaMaterial)  : resultado.folgaMaterial || '-'}
+                                        value={typeof resultado.folgaMaterial === 'number' ? formatNumber(resultado.folgaMaterial) : resultado.folgaMaterial || '-'}
                                         unit="kg de folga"
                                         icon={Package}
                                         colorScheme="purple"
@@ -102,7 +179,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <ResultadosResumoItem
                                         title="Lucros"
                                         subtitle="Valor final"
-                                        value={`${typeof resultado.resultado === 'number' ? formatCurrency(resultado.resultado)  : resultado.folgaMaterial || '-'}`}
+                                        value={`${typeof resultado.resultado === 'number' ? formatCurrency(resultado.resultado) : resultado.folgaMaterial || '-'}`}
                                         unit="lucros"
                                         icon={DollarSign}
                                         colorScheme="yellow"

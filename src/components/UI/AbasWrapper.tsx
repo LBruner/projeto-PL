@@ -1,6 +1,11 @@
+'use client';
+
 import React from "react";
 import {BiX} from "react-icons/bi";
 import {AiOutlinePlus} from "react-icons/ai";
+import CarregarCenarioModal from "@/components/UI/CarregarCenarioModal";
+import {Tooltip, useDisclosure} from "@heroui/react";
+import {SimplexFormData} from "@/models/simplex-form-data";
 
 interface AbaSimplexProps {
     abas: { id: number; nome: string }[];
@@ -8,9 +13,21 @@ interface AbaSimplexProps {
     setAbaAtivaId: (id: number) => void;
     adicionarAba: () => void;
     deletarAba: (id: number) => void;
+    onLoadScenario?: (scenarioName: string, data: SimplexFormData) => void;
 }
 
-const AbaSimplex: React.FC<AbaSimplexProps> = ({abas,adicionarAba,setAbaAtivaId,deletarAba,abaAtivaId}) => {
+const AbasWrapper: React.FC<AbaSimplexProps> = (
+    {
+        abas,
+        adicionarAba,
+        setAbaAtivaId,
+        deletarAba,
+        abaAtivaId,
+        onLoadScenario
+    }) => {
+
+    const {isOpen, onOpen, onClose} = useDisclosure();
+
     return (
         <div className="flex items-center gap-1 border-b dark:border-b-gray-500 p-2 mb-4">
             {abas.map((aba) => (
@@ -40,13 +57,17 @@ const AbaSimplex: React.FC<AbaSimplexProps> = ({abas,adicionarAba,setAbaAtivaId,
                     </div>
                 </div>
             ))}
-            <AiOutlinePlus
-                onClick={adicionarAba}
-                size={35}
-                className="ml-1 h-full p-1 dark:text-gray-300 rounded hover:text-gray-50 hover:cursor-pointer hover:bg-gray-500"
-            />
+            <Tooltip content={'Nova Aba'} size={"lg"} color={'default'}>
+                <AiOutlinePlus
+                    onClick={adicionarAba}
+                    size={35}
+                    className="ml-1 h-full p-1 dark:text-gray-300 rounded hover:text-gray-50 hover:cursor-pointer hover:bg-gray-500"
+                />
+            </Tooltip>
+            <CarregarCenarioModal isOpen={isOpen} onOpen={onOpen} onClose={onClose}
+                                  onLoadScenario={onLoadScenario}/>
         </div>
     )
 }
 
-export default AbaSimplex;
+export default AbasWrapper;
