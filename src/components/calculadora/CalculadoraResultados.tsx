@@ -135,7 +135,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                         Modelo</h3>
                                 </div>
                                 <div className={'flex gap-4'}>
-                                    <Button onPress={onOpen} color={'primary'} variant={'ghost'}>
+                                    <Button onPress={onOpen} color={'primary'} variant={'flat'}>
                                         <Save/>
                                         <p className={'font-semibold'}>Salvar cenário</p>
                                     </Button>
