@@ -8,7 +8,7 @@ import AbasWrapper from "@/components/UI/AbasWrapper";
 import {formDefaultData} from "@/helpers/formDefaults";
 import {addToast} from "@heroui/react";
 
-type AbasSimplex = {
+export type AbasSimplex = {
     id: number;
     nome: string;
     form: SimplexFormData;
@@ -34,6 +34,37 @@ const AbasSimplexList: React.FC = () => {
             setIsCalculatorVisible(!abaAtual.resultado);
         }
     }, [abaAtivaId]);
+
+    const calcularResultadosParaAba = async (abaId: number, formData: SimplexFormData) => {
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/calcular-lpi', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData),
+            });
+
+            const data: Resultado = await res.json();
+
+            setAbas((prev) =>
+                prev.map((aba) =>
+                    aba.id === abaId ? {...aba, resultado: data} : aba
+                )
+            );
+
+            setIsCalculatorVisible(false);
+            return data;
+        } catch (error) {
+            console.error('Error calculating results:', error);
+            throw error;
+        } finally {
+            setTimeout(() => setIsLoading(false), 500);
+        }
+    };
+
+    const calcularResultados = async () => {
+        calcularResultadosParaAba(abaAtivaId, abaAtiva.form);
+    };
 
     const handleChange = (
         e: ChangeEvent<HTMLInputElement>,
@@ -68,27 +99,6 @@ const AbasSimplexList: React.FC = () => {
         setIsCalculatorVisible(true);
     };
 
-    const calcularResultados = async () => {
-        setIsLoading(true);
-        const res = await fetch('/api/calcular-lpi', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(abaAtiva.form),
-        });
-
-        const data: Resultado = await res.json();
-
-        setAbas((prev) =>
-            prev.map((aba) =>
-                aba.id === abaAtivaId ? {...aba, resultado: data} : aba
-            )
-        );
-
-        console.log(abas);
-        setIsCalculatorVisible(false);
-
-        setTimeout(() => setIsLoading(false), 500);
-    };
 
     const adicionarAba = () => {
         const novaId = abas[abas.length - 1].id + 1;
@@ -146,22 +156,24 @@ const AbasSimplexList: React.FC = () => {
         return {};
     };
 
-    const carregarFormularioComoNovaAba = (nome: string) => {
+    const carregarFormularioComoNovaAba = async (nome: string) => {
         const formularios = carregarFormulariosSalvos();
         const form = formularios[nome];
 
         if (!form) return alert("Formulário não encontrado.");
 
         const novaId = abas[abas.length - 1].id + 1;
-        setAbas([
-            ...abas,
-            {
-                id: novaId,
-                nome: `${nome}`,
-                form
-            }
-        ]);
+
+        const novaAba = {
+            id: novaId,
+            nome: `${nome}`,
+            form
+        };
+
+        setAbas(prev => [...prev, novaAba]);
         setAbaAtivaId(novaId);
+
+        await calcularResultadosParaAba(novaId, form);
     };
 
 
