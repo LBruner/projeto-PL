@@ -73,7 +73,7 @@ const AbasWrapper: React.FC<AbaSimplexProps> = (
                     />
                 </Tooltip>
             </div>
-            <div className={'flex items-center gap-2 pr-2'}>
+            <div className={'flex items-center gap-2 pr-6'}>
                 <CarregarCenarioModal isOpen={modalCarregamentoIsOpen} onOpen={modalCarregamentoOnOpen}
                                       onClose={modalCarregamentoOnClose}
                                       onLoadScenario={onLoadScenario}/>
