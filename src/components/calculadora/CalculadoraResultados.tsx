@@ -87,7 +87,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
     };
 
     return (
-        <div className="w-11/12 p-6">
+        <div className="w-10/12 p-6">
             <Modal classNames={{backdrop: 'z-10'}} backdrop={'blur'} isOpen={isOpen} onClose={onClose} size="2xl">
                 <ModalContent>
                     {(onClose) => (
@@ -114,10 +114,10 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                     )}
                 </ModalContent>
             </Modal>
-            <div className={'absolute z-40'}>
+            <div className={'absolute z-[4]'}>
                 <button
                     onClick={() => setIsCalculatorVisible(true)}
-                    className="absolute -top-4 -left-4 z-10 bg-white/90 hover:bg-white dark:bg-gray-800/90 dark:hover:bg-gray-800 backdrop-blur-sm rounded-full p-3 shadow-lg border border-gray-200 dark:border-gray-600 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group dark:focus:ring-blue-400 dark:focus:ring-offset-gray-800"
+                    className="absolute -top-4 -left-4 bg-white/90 hover:bg-white dark:bg-gray-800/90 dark:hover:bg-gray-800 backdrop-blur-sm rounded-full p-3 shadow-lg border border-gray-200 dark:border-gray-600 transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group dark:focus:ring-blue-400 dark:focus:ring-offset-gray-800"
                     aria-label="Voltar para calculadora"
                 ><ArrowLeft className="text-gray-700 dark:text-gray-300"/>
                 </button>
@@ -172,7 +172,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                         title="Material"
                                         subtitle="Recurso disponível"
                                         value={typeof resultado.folgaMaterial === 'number' ? formatNumber(resultado.folgaMaterial) : resultado.folgaMaterial || '-'}
-                                        unit="kg de folga"
+                                        unit="kg de material"
                                         icon={Package}
                                         colorScheme="purple"
                                     />

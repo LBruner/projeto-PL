@@ -6,7 +6,7 @@ import {CgCalculator} from "react-icons/cg";
 
 const CustomNavbar: React.FC = () => {
     return (
-        <Navbar classNames={{base: '-z-1'}} maxWidth={'full'}
+        <Navbar classNames={{base: 'z-[5]'}} maxWidth={'full'}
                 className={'h-auto shadow-sm dark:bg-customDarkNav dark:bg-opacity-40 bg-gray-100  bg-opacity-70 flex top-0 left-0 items-start py-1'}>
             <NavbarBrand>
                 <div className={'flex gap-2 items-center'}>

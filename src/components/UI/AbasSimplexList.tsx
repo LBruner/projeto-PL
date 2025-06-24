@@ -197,11 +197,13 @@ const AbasSimplexList: React.FC = () => {
                         calcularResultados={calcularResultados}
                     />}
                     {!isCalculatorVisible && abaAtiva.resultado && (
-                        <CalculadoraResultados
-                            resultado={abaAtiva.resultado}
-                            setIsCalculatorVisible={setIsCalculatorVisible}
-                            salvarFormulario={salvarFormulario}
-                        />
+                        <div className={'flex flex-col w-full items-center'}>
+                            <CalculadoraResultados
+                                resultado={abaAtiva.resultado}
+                                setIsCalculatorVisible={setIsCalculatorVisible}
+                                salvarFormulario={salvarFormulario}
+                            />
+                        </div>
                     )}
                 </div>
             </div>

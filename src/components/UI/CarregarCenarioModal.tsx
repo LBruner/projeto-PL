@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {addToast, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Tooltip,} from "@heroui/react";
 import {RiDeleteBin6Line, RiLoader4Line, RiSave3Line} from "react-icons/ri";
 import {SimplexFormData} from "@/models/simplex-form-data";
+import {FolderOpen} from "lucide-react";
 
 interface CarregarCenarioModalProps {
     isOpen: boolean;
@@ -94,9 +95,9 @@ const CarregarCenarioModal: React.FC<CarregarCenarioModalProps> = (
     };
 
     return (
-        <>
+        <div className={'flex items-center'}>
             <Tooltip color={'primary'} content={'Carregar Cenário'} size={"lg"}>
-                <RiSave3Line
+                <FolderOpen
                     size={35}
                     className="ml-1 h-full p-1 dark:text-gray-300 rounded hover:text-gray-50 hover:cursor-pointer hover:bg-gray-500 transition-colors duration-200"
                     onClick={onOpen}
@@ -188,7 +189,7 @@ const CarregarCenarioModal: React.FC<CarregarCenarioModalProps> = (
                     )}
                 </ModalContent>
             </Modal>
-        </>
+        </div>
     );
 }
 
