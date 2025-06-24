@@ -8,7 +8,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({children}) => {
     return (
         <HeroUIProvider>
             <CustomThemeProvider>
-                <ToastProvider maxVisibleToasts={1} placement={'top-right'} toastOffset={75}/>
+                <ToastProvider maxVisibleToasts={1} placement={'bottom-right'} toastOffset={15}/>
                 {children}
             </CustomThemeProvider>
         </HeroUIProvider>
