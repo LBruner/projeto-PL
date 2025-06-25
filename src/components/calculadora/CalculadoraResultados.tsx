@@ -87,7 +87,7 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
     };
 
     return (
-        <div className="w-10/12 p-6">
+        <div className="w-11/12 p-6">
             <Modal classNames={{backdrop: 'z-10'}} backdrop={'blur'} isOpen={isOpen} onClose={onClose} size="2xl">
                 <ModalContent>
                     {(onClose) => (
