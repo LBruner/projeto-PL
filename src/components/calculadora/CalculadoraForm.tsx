@@ -13,18 +13,10 @@ interface CalculadoraFormProps {
 
 export const calculadoraCategories = [
     {
-        key: 'lucro',
-        label: 'Lucro',
-        icon: DollarSign,
-        unit: '$',
-        color: 'from-green-500 to-emerald-600',
-        bgColor: 'bg-green-50'
-    },
-    {
         key: 'maoDeObra',
         label: 'Mão-de-obra',
         icon: PersonStanding,
-        unit: 'h',
+        unit: '200h',
         color: 'from-blue-500 to-indigo-600',
         bgColor: 'bg-blue-50'
     },
@@ -32,10 +24,18 @@ export const calculadoraCategories = [
         key: 'material',
         label: 'Material',
         icon: Package,
-        unit: 'kg',
+        unit: '50kg',
         color: 'from-purple-500 to-violet-600',
         bgColor: 'bg-purple-50'
-    }
+    },
+    {
+        key: 'lucro',
+        label: 'Lucro',
+        icon: DollarSign,
+        unit: '$',
+        color: 'from-green-500 to-emerald-600',
+        bgColor: 'bg-green-50'
+    },
 ];
 
 
@@ -90,7 +90,7 @@ const CalculadoraForm: React.FC<CalculadoraFormProps> = ({formData,handleChange,
                                                 className="text-center font-medium hover:shadow-md dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500 dark:hover:bg-gray-500"
                                             />
                                             <div
-                                                className="absolute -top-2 -right-2 text-xs text-gray-400 dark:text-gray-300 bg-white dark:bg-gray-600 rounded-full w-5 h-5 flex items-center justify-center border dark:border-gray-500">
+                                                className="absolute -top-2 -right-2 text-xs text-gray-400 dark:text-gray-300 bg-white dark:bg-gray-600 rounded-full w-8 h-5 flex items-center justify-center border dark:border-gray-500">
                                                 {unit}
                                             </div>
                                         </div>

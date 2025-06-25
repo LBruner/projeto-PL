@@ -23,7 +23,7 @@ const ModeloResultado: React.FC<ModeloResultadoProps> = ({modelo}) => {
                 </div>
                 <div className="text-right">
                     <div className={`text-3xl font-bold ${modelo.textColor}`}>
-                        {modelo.value}
+                        {modelo.value.toFixed(0)}
                     </div>
                     <div className="text-gray-500 dark:text-gray-400 text-sm">unidades</div>
                 </div>

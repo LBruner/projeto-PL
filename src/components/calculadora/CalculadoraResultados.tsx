@@ -97,7 +97,8 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                 <p className="text-sm text-gray-500 font-normal">
                                     Escolha um nome para o cenário e clique em salvar.
                                 </p>
-                                <Input isRequired={true} onValueChange={(e) => setScenarioName(e)} errorMessage={error} isInvalid={error.length != 0} label={'Cenário'}/>
+                                <Input isRequired={true} onValueChange={(e) => setScenarioName(e)} errorMessage={error}
+                                       isInvalid={error.length != 0} label={'Cenário'}/>
                             </ModalHeader>
                             <ModalBody className="py-4">
 
@@ -134,11 +135,13 @@ const CalculadoraResultados: React.FC<CalculadoraResultadosProps> = (
                                     <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">Produção por
                                         Modelo</h3>
                                 </div>
-                                <div className={'flex gap-4'}>
-                                    <Button onPress={onOpen} color={'primary'} variant={'flat'}>
-                                        <Save/>
-                                        <p className={'font-semibold'}>Salvar cenário</p>
-                                    </Button>
+                                <div className={'flex gap-2'}>
+                                    <div className={'flex gap-4 py-2'}>
+                                        <Button className={'py-4'} onPress={onOpen} color={'primary'} variant={'ghost'}>
+                                            <Save className={''}/>
+                                            <p className={'font-semibold '}>Salvar Cenário</p>
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

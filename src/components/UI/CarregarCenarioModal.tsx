@@ -96,7 +96,7 @@ const CarregarCenarioModal: React.FC<CarregarCenarioModalProps> = (
 
     return (
         <div className={'flex items-center'}>
-            <Tooltip color={'primary'} content={'Carregar Cenário'} size={"lg"}>
+            <Tooltip color={'default'} content={'Carregar Cenário'} size={"lg"}>
                 <FolderOpen
                     size={35}
                     className="ml-1 h-full p-1 dark:text-gray-300 rounded hover:text-gray-50 hover:cursor-pointer hover:bg-gray-500 transition-colors duration-200"

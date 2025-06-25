@@ -49,7 +49,7 @@ const CompararResultadosModal: React.FC<CarregarCenarioModalProps> = (
             <div
                 className="group relative"
             >
-                <Tooltip  size={"lg"} color={'default'} content={'Comparar Resultados'} >
+                <Tooltip  size={"lg"} content={'Comparar Resultados'} >
                     <ChartNoAxesCombined
                         size={35}
                         className="ml-1 h-full p-1 dark:text-gray-300 rounded hover:text-gray-50 hover:cursor-pointer hover:bg-gray-500 transition-colors duration-200"
@@ -64,7 +64,6 @@ const CompararResultadosModal: React.FC<CarregarCenarioModalProps> = (
                         className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
                         onClick={handleBackdropClick}
                     />
-
                     <div
                         className="relative w-full max-w-[88vw] max-h-[88vh] m-2 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex flex-col animate-in fade-in-0 zoom-in-95 duration-300">
                         <div
@@ -72,7 +71,7 @@ const CompararResultadosModal: React.FC<CarregarCenarioModalProps> = (
                             <div className="flex items-center gap-3">
                                 <div
                                     className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg">
-                                    <ChartNoAxesCombined className="w-5 h-5"/>
+                                    <ChartNoAxesCombined color={'blue'} className="text-blue-400 w-5 h-5"/>
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
