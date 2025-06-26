@@ -12,7 +12,7 @@ import {
     YAxis
 } from 'recharts';
 import {AbasSimplex} from "@/components/UI/AbasSimplexList";
-import {Activity, BarChart3, Eye, EyeOff, Package, TrendingUp} from 'lucide-react';
+import {Activity, BarChart3, ChartNoAxesCombined, Eye, EyeOff, Package, TrendingUp} from 'lucide-react';
 
 
 const GraficosComparaResultados: React.FC<{ abas: AbasSimplex[] }> = ({abas}) => {
@@ -76,12 +76,12 @@ const GraficosComparaResultados: React.FC<{ abas: AbasSimplex[] }> = ({abas}) =>
 
     if (scenariosWithResults.length === 0) {
         return (
-            <div className="p-8 text-center bg-gray-50 rounded-lg">
-                <div className="mx-auto h-16 w-16 bg-gray-300 rounded-lg mb-4 flex items-center justify-center">
-                    📊
+            <div className="p-8 text-center bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="mx-auto h-16 w-16 bg-gray-300 dark:bg-gray-700 rounded-lg mb-4 flex items-center justify-center">
+                    <ChartNoAxesCombined/>
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum resultado para comparar</h3>
-                <p className="text-gray-500">Execute os cálculos em pelo menos um cenário para visualizar as
+                <h3 className="text-lg dark:text-white font-medium text-black mb-2">Nenhum resultado para comparar</h3>
+                <p className="text-gray-500 dark:text-gray-200">Execute os cálculos em pelo menos um cenário para visualizar as
                     comparações.</p>
             </div>
         );
