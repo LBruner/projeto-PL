@@ -11,7 +11,7 @@ const CustomNavbar: React.FC = () => {
             <NavbarBrand>
                 <div className={'flex gap-2 items-center'}>
                     <p><CgCalculator className={'text-blue-500'} size={35}/></p>
-                    <p className="font-bold text-inherit dark:text-white">Calculadora Simplex</p>
+                    <p className="font-bold text-inherit dark:text-white">Simplex</p>
                 </div>
             </NavbarBrand>
             <NavbarItem>

@@ -12,7 +12,7 @@ import {
     YAxis
 } from 'recharts';
 import {AbasSimplex} from "@/components/UI/AbasSimplexList";
-import {Activity, BarChart3, Eye, EyeOff, Package, TrendingUp, TrendingUp as LineChartIcon} from 'lucide-react';
+import {Activity, BarChart3, Eye, EyeOff, Package, TrendingUp} from 'lucide-react';
 
 
 const GraficosComparaResultados: React.FC<{ abas: AbasSimplex[] }> = ({abas}) => {
@@ -98,7 +98,7 @@ const GraficosComparaResultados: React.FC<{ abas: AbasSimplex[] }> = ({abas}) =>
     };
 
     return (
-        <div className="space-y-8 w-10/12 mx-auto p-6">
+        <div className="space-y-8 w-11/12 mx-auto p-6">
             <div
                 className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 dark:border-gray-700/50 overflow-hidden">
                 <div
@@ -125,16 +125,16 @@ const GraficosComparaResultados: React.FC<{ abas: AbasSimplex[] }> = ({abas}) =>
                             >
                                 <BarChart3 className="w-4 h-4"/>
                             </button>
-                            <button
-                                onClick={() => setChartType('line')}
-                                className={`p-3 rounded-xl transition-all duration-200 flex items-center gap-2 ${
-                                    chartType === 'line'
-                                        ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                }`}
-                            >
-                                <LineChartIcon className="w-4 h-4"/>
-                            </button>
+                            {/*<button*/}
+                            {/*    onClick={() => setChartType('line')}*/}
+                            {/*    className={`p-3 rounded-xl transition-all duration-200 flex items-center gap-2 ${*/}
+                            {/*        chartType === 'line'*/}
+                            {/*            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'*/}
+                            {/*            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'*/}
+                            {/*    }`}*/}
+                            {/*>*/}
+                            {/*    <LineChartIcon className="w-4 h-4"/>*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                 </div>

@@ -16,7 +16,7 @@ export const calculadoraCategories = [
         key: 'maoDeObra',
         label: 'Mão-de-obra',
         icon: PersonStanding,
-        unit: '200h',
+        unit: 'h',
         color: 'from-blue-500 to-indigo-600',
         bgColor: 'bg-blue-50'
     },
@@ -24,7 +24,7 @@ export const calculadoraCategories = [
         key: 'material',
         label: 'Material',
         icon: Package,
-        unit: '50kg',
+        unit: 'kg',
         color: 'from-purple-500 to-violet-600',
         bgColor: 'bg-purple-50'
     },

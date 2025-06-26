@@ -65,7 +65,7 @@ const AbasWrapper: React.FC<AbaSimplexProps> = (
                         </div>
                     </div>
                 ))}
-                <Tooltip content={'Nova Aba'} size={"lg"} color={'default'}>
+                <Tooltip content={'Novo cenário'} size={"lg"} color={'default'}>
                     <AiOutlinePlus
                         onClick={adicionarAba}
                         size={35}
